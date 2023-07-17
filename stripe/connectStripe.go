@@ -12,7 +12,7 @@ func main() {
 	stripe.Key = "sk_test_51NLn6uAMAaJjSlCRqP73JO9EnAyybtGXZUUP3g1h61F3sxKai6GAJdu0NxDeHofudqYFFW6DmiHXX7BMoBXq5cIU00bEQrKs2r"
 
 	http.HandleFunc("/create-checkout-session", handleCreateCheckoutSession)
-	log.Fatal(http.ListenAndServe("hikaru555.github.io", nil))
+	log.Fatal(http.ListenAndServe(":8080", nil))
 }
 
 func handleCreateCheckoutSession(w http.ResponseWriter, r *http.Request) {
