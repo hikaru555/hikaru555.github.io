@@ -1,0 +1,11 @@
+{
+	"folders": [
+		{
+			"name": "hikaru555.github.io",
+			"path": "."
+		}
+	],
+	"settings": {
+		"liveServer.settings.multiRootWorkspaceName": "learn-go"
+	}
+}
