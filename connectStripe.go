@@ -21,7 +21,7 @@ func main() {
 
 	e.POST("/create-checkout-session", createCheckoutSession)
 
-	e.Logger.Fatal(e.Start("localhost:4242"))
+	e.Logger.Fatal(e.Start("hikaru555.github.io"))
 }
 
 func createCheckoutSession(c echo.Context) (err error) {
