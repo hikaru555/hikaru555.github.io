@@ -13,7 +13,7 @@ func main() {
 	stripe.Key = "sk_test_51NLn6uAMAaJjSlCRqP73JO9EnAyybtGXZUUP3g1h61F3sxKai6GAJdu0NxDeHofudqYFFW6DmiHXX7BMoBXq5cIU00bEQrKs2r"
 
 	http.Handle("/", http.FileServer(http.Dir("public")))
-	http.HandleFunc("/stripe/create-checkout-session", createCheckoutSession)
+	http.HandleFunc("/stripe/checkout-session.go", createCheckoutSession)
 	addr := "hikaru555.github.io/stripe"
 	log.Printf("Listening on %s", addr)
 	log.Fatal(http.ListenAndServe(addr, nil))
