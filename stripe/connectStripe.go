@@ -1,53 +1,51 @@
 package main
 
 import (
+	"log"
 	"net/http"
 
-	"github.com/labstack/echo"
-	"github.com/labstack/echo/middleware"
 	"github.com/stripe/stripe-go/v74"
 	"github.com/stripe/stripe-go/v74/checkout/session"
 )
 
-// This example sets up an endpoint using the Echo framework.
-// Watch this video to get started: https://youtu.be/ePmEVBu8w6Y.
-
 func main() {
 	stripe.Key = "sk_test_51NLn6uAMAaJjSlCRqP73JO9EnAyybtGXZUUP3g1h61F3sxKai6GAJdu0NxDeHofudqYFFW6DmiHXX7BMoBXq5cIU00bEQrKs2r"
 
-	e := echo.New()
-	e.Use(middleware.Logger())
-	e.Use(middleware.Recover())
-
-	e.POST("/create-checkout-session", createCheckoutSession)
-
-	e.Logger.Fatal(e.Start("hikaru555.github.io"))
+	http.HandleFunc("/create-checkout-session", handleCreateCheckoutSession)
+	log.Fatal(http.ListenAndServe("hikaru555.github.io", nil))
 }
 
-func createCheckoutSession(c echo.Context) (err error) {
+func handleCreateCheckoutSession(w http.ResponseWriter, r *http.Request) {
+	// Create a new Checkout Session
 	params := &stripe.CheckoutSessionParams{
-		Mode: stripe.String(string(stripe.CheckoutSessionModePayment)),
+		PaymentMethodTypes: stripe.StringSlice([]string{
+			"card",
+		}),
 		LineItems: []*stripe.CheckoutSessionLineItemParams{
-			&stripe.CheckoutSessionLineItemParams{
+			{
 				PriceData: &stripe.CheckoutSessionLineItemPriceDataParams{
 					Currency: stripe.String("usd"),
 					ProductData: &stripe.CheckoutSessionLineItemPriceDataProductDataParams{
-						Name: stripe.String("T-shirt"),
+						Name: stripe.String("Product Name"),
 					},
-					UnitAmount: stripe.Int64(2000),
+					UnitAmount: stripe.Int64(1000), // amount in cents
 				},
 				Quantity: stripe.Int64(1),
 			},
 		},
-		SuccessURL: stripe.String("http://google.com"),
-		CancelURL:  stripe.String("http://droidsans.com"),
+		Mode:       stripe.String(string(stripe.CheckoutSessionModePayment)),
+		SuccessURL: stripe.String("https://google.com"),
+		CancelURL:  stripe.String("https://droidsans.com"),
 	}
 
-	s, _ := session.New(params)
-
+	session, err := session.New(params)
 	if err != nil {
-		return err
+		log.Printf("Error creating checkout session: %s", err.Error())
+		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
+		return
 	}
 
-	return c.Redirect(http.StatusSeeOther, s.URL)
+	// Return the Checkout Session ID in the response
+	w.Header().Set("Content-Type", "application/json")
+	w.Write([]byte(`{"sessionId": "` + session.ID + `"}`))
 }
