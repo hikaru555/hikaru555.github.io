@@ -21,6 +21,7 @@ func main() {
 
 func serveFileHandler(filename string) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set("Content-Type", "text/css")
 		http.ServeFile(w, r, filename)
 	}
 }
@@ -31,7 +32,7 @@ func createCheckoutSession(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	domain := "http://localhost:8080"
+	//domain := "http://localhost:8080"
 	params := &stripe.CheckoutSessionParams{
 		LineItems: []*stripe.CheckoutSessionLineItemParams{
 			{
@@ -40,9 +41,9 @@ func createCheckoutSession(w http.ResponseWriter, r *http.Request) {
 				Quantity: stripe.Int64(1),
 			},
 		},
-		Mode:       stripe.String(string(stripe.CheckoutSessionModePayment)),
-		SuccessURL: stripe.String(domain + "/success.html"),
-		CancelURL:  stripe.String(domain + "/cancel.html"),
+		Mode: stripe.String(string(stripe.CheckoutSessionModePayment)),
+		//SuccessURL: stripe.String(domain + "/success.html"),
+		//CancelURL:  stripe.String(domain + "/cancel.html"),
 	}
 
 	s, err := session.New(params)

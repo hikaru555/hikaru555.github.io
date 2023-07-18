@@ -1,0 +1,16 @@
+package main
+
+import (
+	"fmt"
+)
+
+func main() {
+	num := 37
+	if num%2 == 0 {
+		fmt.Println("It is even number")
+	} else if num == 35 {
+		fmt.Println("It is 35")
+	} else {
+		fmt.Println("It is odd number")
+	}
+}

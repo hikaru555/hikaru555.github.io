@@ -8,7 +8,7 @@
   <body>
     <section>
       <div class="product">
-        <img src="https://example.com/product-image.jpg" alt="Product Image" />
+        <img src="/images/Galaxy_Me.png" alt="Product Image" width="200px"/>
         <div class="description">
           <h3>Product Name</h3>
           <h5>$19.99</h5>
@@ -25,6 +25,7 @@
           stripe.redirectToCheckout({
             lineItems: [{ price: "price_1NV2QDAMAaJjSlCRiEu2dCwV", quantity: 1 }],
             mode: "payment",
+            //mode: "setup",
             successUrl: "http://localhost:5500/success.html",
             cancelUrl: "http://localhost:5500/cancel.html"
           });

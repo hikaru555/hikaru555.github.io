@@ -1,0 +1,43 @@
+package main
+
+import (
+	"fmt"
+)
+
+/*func main() {
+	lim := 225.0
+	v := math.Pow(10, 2)
+
+	if v < lim {
+		fmt.Println("x power n is: ", v)
+	} else {
+		fmt.Printf("x power n is %g over limit %g.\n", v, lim)
+	}
+}*/
+
+/*func main() {
+	lim := 225.0
+
+//v in scope of if only, so you cannot print v after condition
+	if v := math.Pow(10, 2); v < lim {
+		fmt.Println("x power n is: ", v)
+	} else {
+		fmt.Printf("x power n is %g over limit %g.\n", v, lim)
+	}
+}*/
+
+//WORKSHOP
+
+func main() {
+	rate := 14
+
+	if rate < 5.0 {
+		fmt.Println("Disappointed")
+	} else if rate >= 5.0 && rate < 7.0 {
+		fmt.Println("Normal")
+	} else if rate >= 7.0 && rate < 10.0 {
+		fmt.Println("Good")
+	} else {
+		fmt.Println("WTF!")
+	}
+}
