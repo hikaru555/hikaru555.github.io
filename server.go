@@ -14,13 +14,13 @@ func main() {
 
 	http.Handle("/", http.FileServer(http.Dir("public")))
 	http.HandleFunc("/create-checkout-session", createCheckoutSession)
-	addr := "https://hikaru555.github.io"
+	addr := "https://hikaru555.github.io:443"
 	log.Printf("Listening on %s", addr)
 	log.Fatal(http.ListenAndServe(addr, nil))
 }
 
 func createCheckoutSession(w http.ResponseWriter, r *http.Request) {
-	domain := "https://hikaru555.github.io"
+	domain := "https://hikaru555.github.io:443"
 	params := &stripe.CheckoutSessionParams{
 		LineItems: []*stripe.CheckoutSessionLineItemParams{
 			/*&stripe.CheckoutSessionLineItemParams*/ {
