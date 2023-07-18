@@ -10,7 +10,7 @@ import (
 
 func main() {
 	// This is your test secret API key.
-	stripe.Key = "sk_test_51NLn6uAMAaJjSlCRqP73JO9EnAyybtGXZUUP3g1h61F3sxKai6GAJdu0NxDeHofudqYFFW6DmiHXX7BMoBXq5cIU00bEQrKs2r"
+	stripe.Key = "sk_test_51NLn6uAMAaJjSlCRSuYdPj052VLmxwrjFVhNN78Qr0VoodDpLhwG3GD7MZPqFZ5kstWpU5VUwEuJzzTp3COdgSdv00nEWuz3tB"
 
 	http.Handle("/", http.FileServer(http.Dir("public")))
 	http.HandleFunc("/create-checkout-session", createCheckoutSession)
