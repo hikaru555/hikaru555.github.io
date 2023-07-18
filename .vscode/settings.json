@@ -1,0 +1,5 @@
+{
+    "go.toolsEnvVars": {
+        "GOENV": "/home/codespace/accept-a-payment/prebuilt-checkout-page/server/go"
+    }
+}
