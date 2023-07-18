@@ -12,11 +12,17 @@ func main() {
 	// This is your test secret API key.
 	stripe.Key = "sk_test_51NLn6uAMAaJjSlCRSuYdPj052VLmxwrjFVhNN78Qr0VoodDpLhwG3GD7MZPqFZ5kstWpU5VUwEuJzzTp3COdgSdv00nEWuz3tB"
 
-	http.Handle("/", http.FileServer(http.Dir("public")))
+	http.HandleFunc("/", serveFileHandler("public/index.html"))
 	http.HandleFunc("/create-checkout-session", createCheckoutSession)
-	addr := ":8080"
+	addr := "localhost:8080"
 	log.Printf("Listening on %s", addr)
-	log.Fatal(http.ListenAndServe(addr, nil))
+	log.Fatal(http.ListenAndServeTLS(addr, "cert.pem", "key.pem", nil))
+}
+
+func serveFileHandler(filename string) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		http.ServeFile(w, r, filename)
+	}
 }
 
 func createCheckoutSession(w http.ResponseWriter, r *http.Request) {
@@ -25,7 +31,7 @@ func createCheckoutSession(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	domain := "https://hikaru555.github.io"
+	domain := "http://localhost:8080"
 	params := &stripe.CheckoutSessionParams{
 		LineItems: []*stripe.CheckoutSessionLineItemParams{
 			{
