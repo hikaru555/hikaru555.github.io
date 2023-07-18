@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Payment Form</title>
+    <script src="https://js.stripe.com/v3/"></script>
+  </head>
+  <body>
+    <h1>Payment Form</h1>
+
+    <form id="payment-form">
+      <div>
+        <label for="card-element">
+          Credit or debit card
+        </label>
+        <div id="card-element"></div>
+      </div>
+
+      <button type="submit">Submit Payment</button>
+    </form>
+
+    <script>
+      var stripe = Stripe("pk_test_51NLn6uAMAaJjSlCR3513yxA4gAFYqP5MxJ9SgqNZWKlrLiMN8j4hMOI4F7lo55qkEWHIDH3GN1VIckSP0gjK2sxJ00R6ZjXfNL");
+      var elements = stripe.elements();
+      var cardElement = elements.create("payment");
+
+      cardElement.mount("#card-element");
+
+      document.getElementById("payment-form").addEventListener("submit", function(event) {
+        event.preventDefault();
+        stripe.createPaymentMethod({
+          type: "card",
+          card: cardElement,
+          billing_details: {
+            name: "John Doe"
+          
+          }
+        }).then(function(result) {
+          if (result.error) {
+            console.error(result.error);
+          } else {
+            // Payment method created successfully
+            createPaymentIntent(result.paymentMethod.id);
+          }
+        });
+      });
+
+      function createPaymentIntent(paymentMethodId) {
+        fetch("/create-payment-intent", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({ payment_method_id: paymentMethodId })
+        })
+          .then(function(response) {
+            return response.json();
+          })
+          .then(function(data) {
+            // Payment Intent created successfully
+            confirmPaymentIntent(data.clientSecret);
+          });
+      }
+
+      function confirmPaymentIntent(clientSecret) {
+        stripe.confirmCardPayment(clientSecret, {
+          payment_method: {
+            card: cardElement
+          }
+        }).then(function(result) {
+          if (result.error) {
+            console.error(result.error);
+          } else {
+            // Payment succeeded
+            capturePaymentIntent(result.paymentIntent.id);
+          }
+        });
+      }
+
+      function capturePaymentIntent(paymentIntentId) {
+        fetch("/capture-payment-intent", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({ payment_intent_id: paymentIntentId })
+        })
+          .then(function(response) {
+            return response.json();
+          })
+          .then(function(data) {
+            console.log(data.message);
+            // Payment captured successfully
+          });
+      }
+    </script>
+  </body>
+</html>
