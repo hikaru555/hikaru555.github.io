@@ -14,16 +14,21 @@ func main() {
 
 	http.Handle("/", http.FileServer(http.Dir("public")))
 	http.HandleFunc("/create-checkout-session", createCheckoutSession)
-	addr := "https://hikaru555.github.io:443"
+	addr := ":8080"
 	log.Printf("Listening on %s", addr)
 	log.Fatal(http.ListenAndServe(addr, nil))
 }
 
 func createCheckoutSession(w http.ResponseWriter, r *http.Request) {
-	domain := "https://hikaru555.github.io:443"
+	if r.Method != http.MethodPost {
+		http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
+		return
+	}
+
+	domain := "https://hikaru555.github.io"
 	params := &stripe.CheckoutSessionParams{
 		LineItems: []*stripe.CheckoutSessionLineItemParams{
-			/*&stripe.CheckoutSessionLineItemParams*/ {
+			{
 				// Provide the exact Price ID (for example, pr_1234) of the product you want to sell
 				Price:    stripe.String("{{PRICE_ID}}"),
 				Quantity: stripe.Int64(1),
@@ -38,6 +43,8 @@ func createCheckoutSession(w http.ResponseWriter, r *http.Request) {
 
 	if err != nil {
 		log.Printf("session.New: %v", err)
+		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
+		return
 	}
 
 	http.Redirect(w, r, s.URL, http.StatusSeeOther)
