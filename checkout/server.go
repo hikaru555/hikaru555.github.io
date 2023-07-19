@@ -8,12 +8,16 @@ import (
 	"github.com/stripe/stripe-go/v74/checkout/session"
 )
 
+const clientdir = "./client"
+
 func main() {
 	// This is your test secret API key.
 	stripe.Key = "sk_test_51NLn6uAMAaJjSlCRSuYdPj052VLmxwrjFVhNN78Qr0VoodDpLhwG3GD7MZPqFZ5kstWpU5VUwEuJzzTp3COdgSdv00nEWuz3tB"
 
-	http.HandleFunc("/", serveFileHandler("public/index.html"))
+	http.Handle("/client/", http.StripPrefix("/client/", http.FileServer(http.Dir(clientdir))))
+	//http.HandleFunc("/", serveFileHandler("public/index.html"))
 	http.HandleFunc("/create-checkout-session", createCheckoutSession)
+
 	addr := "localhost:8080"
 	log.Printf("Listening on %s", addr)
 	log.Fatal(http.ListenAndServeTLS(addr, "cert.pem", "key.pem", nil))
