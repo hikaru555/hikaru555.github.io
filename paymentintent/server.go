@@ -17,7 +17,7 @@ func main() {
 	http.HandleFunc("/confirm-payment-intent", confirmPaymentIntent)
 	http.HandleFunc("/capture-payment-intent", capturePaymentIntent)
 
-	log.Fatal(http.ListenAndServe("localhost:8080", nil))
+	log.Fatal(http.ListenAndServe("localhost:4242", nil))
 }
 
 func createPaymentIntent(w http.ResponseWriter, r *http.Request) {
